@@ -50,6 +50,13 @@ export default defineConfig({
         baseURL: process.env.API_BASE_URL,
       },
     },
+    {
+      name: "e2e-tests",
+      testMatch: "e2e.spec.js",
+      use: {
+        baseURL: process.env.UI_BASE_URL,
+      },
+    }
     // {
     //   name: 'firefox',
     //   use: { ...devices['Desktop Firefox'] },

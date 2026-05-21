@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 import { RegisterPage } from "../page-object/Register.page.js";
 import { newUser1, cardData } from "../data/testData.js";
 import { LoginPage } from "../page-object/Login.page.js";
@@ -9,39 +9,73 @@ import { MyAccountPage } from "../page-object/MyAccount.page.js";
 
 test.setTimeout(50 * 1000);
 
-test("test", async ({ page }) => {
+test("Create new user and login, add products to cart and complete checkout", async ({
+  page,
+}) => {
   const registerPage = new RegisterPage(page);
   const loginPage = new LoginPage(page);
   const catalogPage = new CatalogPage(page);
   const checkoutPage = new CheckoutPage(page);
   const myAccountPage = new MyAccountPage(page);
+  const bascketPage = new BascketPage(page);
 
-  await registerPage.navigate();
+  await registerPage.openLoginPage();
   await registerPage.fillRegistrationForm(newUser1);
   await loginPage.login(newUser1.emailAddress, newUser1.password);
-  await catalogPage.selectProduct();
+  const items = await catalogPage.selectProduct();
 
-  const bascketPage = new BascketPage(
-    page,
-    catalogPage.tabletNameValue,
-    catalogPage.coffeeMachineNameValue,
-    catalogPage.tabletPriceValue,
-    catalogPage.coffeeMachinePriceValue,
+  await expect(catalogPage.basketCount).toBeVisible();
+  await expect(catalogPage.basketCount).toContainText("2", { timeout: 3000 });
+  await catalogPage.goToBasket();
+
+  await expect(bascketPage.firstProductItem).toHaveText(
+    items.firstProduct.name,
+  );
+  await expect(bascketPage.secondProductItem).toHaveText(
+    items.secondProduct.name,
+  );
+  await expect(bascketPage.firstProductPrice).toHaveText(
+    items.firstProduct.price,
+  );
+  await expect(bascketPage.secondProductPrice).toHaveText(
+    items.secondProduct.price,
   );
 
-  await bascketPage.compareProductDetails();
+ 
+  const firstProductPriceNumber = Number(
+    (await bascketPage.firstProductPrice.innerText()).replace(/\D/g, ""),
+  );
+  const secondProductPriceNumber = Number(
+    (await bascketPage.secondProductPrice.innerText()).replace(/\D/g, ""),
+  );
+  const totalNumber = parseInt(
+    (await bascketPage.totalValue.innerText()).replace(/[^\d.]/g, ""),
+    10,
+  );
+  expect(totalNumber).toBe(firstProductPriceNumber + secondProductPriceNumber);
+
   await bascketPage.checkTotalprice();
   await checkoutPage.fillPaymentData(
     cardData.cardNumber,
     cardData.cardDate,
     cardData.cardCVV,
   );
-  await checkoutPage.successOrderMessage();
+
+  await expect(checkoutPage.checkoutSuccess).toBeVisible({ timeout: 8000 });
+  await expect(checkoutPage.page).toHaveURL("/checkout");
+
   await checkoutPage.goToMyAccount();
-//   await myAccountPage.checkFinalOrder(
-//     catalogPage.tabletPriceValue,
-//     catalogPage.coffeeMachinePriceValue,
-//   );
-//   await myAccountPage.checkTwoItems();
+  await expect(checkoutPage.page).toHaveURL("/account");
+
+  //   const totalPrice =
+  //         Number(items.firstProduct.price.replace("$", "")) +
+  //         Number(items.secondProduct.price.replace("$", ""));
+  //    await expect(myAccountPage.totalAmountField).toContainText(`${totalPrice}`, {
+  //         timeout: 5000,
+  //       });
+
+//   await expect(myAccountPage.items.first()).toBeVisible();
+//   await expect(myAccountPage.items.last()).toBeVisible();
+//   await expect(myAccountPage.logoutBtn).toBeEnabled();
   await myAccountPage.logout();
 });
