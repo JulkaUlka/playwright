@@ -19,8 +19,7 @@ export class BascketPage {
   }
 
 
-  async checkTotalprice() {
-    // await this.addFirstItemBtn.click({clickCount:1, delay: 1000});
+  async goToCheckoutPage() {
     await this.checkoutBtn.click();
     await this.page.waitForURL("/checkout");
   }
