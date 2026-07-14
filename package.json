@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "ui": "npx playwright test --project=e2e-tests",
-    "api": "npx playwright test --project=api-tests"
+    "api": "npx playwright test --project=api-tests",
+    "vr": "npx playwright test --project=visual-regression"
   },
   "keywords": [],
   "author": "",
