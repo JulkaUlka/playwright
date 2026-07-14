@@ -1,4 +1,6 @@
-export class BascketPage {
+import { AbstractPage } from "./Abstract.page.js";
+
+export class BascketPage extends AbstractPage{
   constructor(
     page,
     tabletNameValue,
@@ -6,6 +8,7 @@ export class BascketPage {
     tabletPriceValue,
     coffeeMachinePriceValue,
   ) {
+    super(page);
     this.page = page;
     this.firstProductItem = page.locator('[id="cart-item-name-5"]');
     this.secondProductItem = page.locator('[id="cart-item-name-6"]');

@@ -16,6 +16,7 @@ dotenv.config({ path: ".env" });
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
+  snapshotDir: "./data",
   testDir: "./tests",
   globalTeardown: "./global-teardown.js",
 
@@ -32,7 +33,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     geolocation: { longitude: 30.5235, latitude: 50.4501 },
-    headless: true,
+    headless: false,
     timeout: 60 * 1000,
     actionTimeout: 10 * 1000,
     navigationTimeout: 10 * 1000,
@@ -53,10 +54,6 @@ export default defineConfig({
       },
     },
     {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
-    },
-    {
       name: "api-tests",
       testMatch: "api.spec.js",
       use: {
@@ -72,6 +69,15 @@ export default defineConfig({
         storageState: "data/storageState.json",
       },
     },
+     {
+      name: "visual-regression",
+      testMatch: "visualRegression.spec.js",
+      dependencies: ["setup-ui"],
+      use: {
+        baseURL: process.env.UI_BASE_URL,
+        storageState: "data/storageState.json",
+      },
+    }
     // {
     //   name: 'firefox',
     //   use: { ...devices['Desktop Firefox'] },

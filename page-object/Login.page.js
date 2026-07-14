@@ -1,6 +1,9 @@
-export class LoginPage {
+import { AbstractPage } from "./Abstract.page.js";
+
+export class LoginPage extends AbstractPage {
   constructor(page) {
-    this.page = page;
+    super(page);
+
     this.emailField = page.locator('[id="login-email"]');
     this.passwordField = page.locator('[id="login-password"]');
     this.loginBtn = page.locator('[id="login-button"]');
@@ -12,6 +15,5 @@ export class LoginPage {
     await this.passwordField.fill(password);
     await this.loginBtn.click();
     await this.catalogTitle.waitFor();
-    
   }
 }

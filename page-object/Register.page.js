@@ -1,5 +1,8 @@
-export class RegisterPage {
+import { AbstractPage } from "./Abstract.page.js";
+
+export class RegisterPage extends AbstractPage {
   constructor(page) {
+    super(page);
     this.page = page;
     this.registerBtn = page.locator('[id="login-register-button"]');
     this.firstNameField = page.locator('[id="register-first-name"]');
@@ -14,9 +17,9 @@ export class RegisterPage {
     this.submitBtn = page.locator('[id="register-button"]');
   }
 
-  async openLoginPage() {
-    await this.page.goto("/login");
-  }
+ async openLoginPage() {
+  await super.openLoginPage("/login");
+}
 
   async fillRegistrationForm(testData) {
     await this.registerBtn.click();

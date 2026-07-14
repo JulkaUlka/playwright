@@ -1,5 +1,8 @@
-export class MyAccountPage {
+import { AbstractPage } from "./Abstract.page.js";
+
+export class MyAccountPage extends AbstractPage{
   constructor(page) {
+    super(page);
     this.page = page;
     this.items = page.locator("#account-order-0 ul > li");
     this.totalAmountField = page.locator("#account-order-0 p", {
