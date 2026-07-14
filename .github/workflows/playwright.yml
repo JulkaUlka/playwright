@@ -10,8 +10,8 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     env:
-      CARD_DATE: ${{ secrets.CARD_DATE }},
-      CARD_NUMBER: ${{ secrets.CARD_NUMBER }},
+      CARD_DATE: ${{ secrets.CARD_DATE }}
+      CARD_NUMBER: ${{ secrets.CARD_NUMBER }}
       UI_BASE_URL: ${{ secrets.UI_BASE_URL }}
     steps:
     - uses: actions/checkout@v5
@@ -31,8 +31,7 @@ jobs:
         path: playwright-report/
         retention-days: 5
 
-
-   api:
+  api:
     name: API Tests
     timeout-minutes: 10
     runs-on: ubuntu-latest
