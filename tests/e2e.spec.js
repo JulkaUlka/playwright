@@ -5,7 +5,6 @@ import { BascketPage } from "../page-object/Bascket.page.js";
 import { CheckoutPage } from "../page-object/Checkout.page.js";
 import { MyAccountPage } from "../page-object/MyAccount.page.js";
 
-test.setTimeout(50 * 1000);
 
 test.describe("E2E: order flow", () => {
   test.beforeAll(async ({}) => {
